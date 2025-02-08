@@ -36,7 +36,7 @@ class Game:
         if self.snake.arr[0][0] == self.food.pos[0] and self.snake.arr[0][1] == self.food.pos[1]:
             self.score +=1
             self.food.spawn(self.snake.arr)
-            self.snake.arr.append([self.snake.arr[-1][0]+self.snake.dir[0],self.snake.arr[-1][1]+self.snake.dir[1]])
+            self.snake.arr.append([self.food.pos[0] , self.food.pos[1]])
             self.snake.length +=1
 
     def snake_collision(self):
