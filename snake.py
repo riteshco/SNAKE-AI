@@ -12,7 +12,36 @@ MOVE_RIGHT = [1,0]
 
 P = 1
 
-VEL = 10
+VEL = 0.001
+
+
+
+HAMILTONIAN_GRAPH = []
+
+for i in range(0,WINDOW_SIZE[1]//CELL_SIZE):
+    next = 0
+    for j in range(WINDOW_SIZE[0]//CELL_SIZE):
+        if i==0:
+            HAMILTONIAN_GRAPH.append([j,i])
+        elif i==WINDOW_SIZE[1]//CELL_SIZE-1:
+            if j!=0:
+                HAMILTONIAN_GRAPH.append([WINDOW_SIZE[0]//CELL_SIZE-1-j,i])
+        elif i%2!=0:
+            if  j != WINDOW_SIZE[0]//CELL_SIZE-1 and j!=0 :
+                HAMILTONIAN_GRAPH.append([WINDOW_SIZE[0]//CELL_SIZE-1-j,i])
+        else:
+            if j!=0 and j!=1:
+                HAMILTONIAN_GRAPH.append([j,i])
+    if i<WINDOW_SIZE[1]//CELL_SIZE-1:
+        if i%2==0:
+            HAMILTONIAN_GRAPH.append([WINDOW_SIZE[0]//CELL_SIZE-1,i+1])
+        else:
+            HAMILTONIAN_GRAPH.append([1,i+1])
+for i in range(WINDOW_SIZE[1]//CELL_SIZE):
+    if i!=WINDOW_SIZE[1]//CELL_SIZE-1 and i!=0:
+        HAMILTONIAN_GRAPH.append([0,WINDOW_SIZE[1]//CELL_SIZE-1-i])
+
+# print(HAMILTONIAN_GRAPH)
 
 class Snake:
     def __init__(self , arr):
@@ -46,7 +75,14 @@ class Snake:
                 if abs(offset_y1) < 2 and abs(offset_x1) < 2:
                     pygame.draw.rect(screen , GREEN , (section[0]*CELL_SIZE+P+offset_x1*P , section[1]*CELL_SIZE+P+offset_y1*P , CELL_SIZE-2*P , CELL_SIZE-2*P ))
 
-
+    def Hamil_move(self):
+        for i in range(len(HAMILTONIAN_GRAPH)):
+                if self.arr[0] == HAMILTONIAN_GRAPH[i]:
+                    if i == len(HAMILTONIAN_GRAPH)-1:
+                        vec = [HAMILTONIAN_GRAPH[0][0] - HAMILTONIAN_GRAPH[i][0],HAMILTONIAN_GRAPH[0][1] - HAMILTONIAN_GRAPH[i][1]]
+                    else:
+                        vec = [HAMILTONIAN_GRAPH[i+1][0] - HAMILTONIAN_GRAPH[i][0],HAMILTONIAN_GRAPH[i+1][1] - HAMILTONIAN_GRAPH[i][1]]
+                    self.dir = vec
 
     def move(self):
         self.ticks +=1

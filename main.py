@@ -4,12 +4,15 @@ import time
 from snake import Snake
 from food import Food
 
-WINDOW_SIZE = (800,600)
+WINDOW_SIZE = (800,620)
 
 MOVE_UP = [0,-1]
 MOVE_DOWN = [0,1]
 MOVE_LEFT = [-1,0]
 MOVE_RIGHT = [1,0]
+
+CELL_SIZE = 20
+
 
 class Game:
     def __init__(self):
@@ -40,9 +43,11 @@ class Game:
             self.snake.length +=1
 
     def snake_collision(self):
-        future = self.snake.future_head()
-        if future in self.snake.arr:
-            self.game_over = True
+        present = [self.snake.arr[0][0] , self.snake.arr[0][1]]
+        for i in range(self.snake.length):
+            if i!=0:
+                if present == self.snake.arr[i]:
+                    self.game_over = True
             
 
     def run(self):
@@ -78,8 +83,9 @@ class Game:
 
     def update(self):
         self.check_food_collision()
-        self.snake_collision()
+        self.snake.Hamil_move()
         self.snake.move()
+        self.snake_collision()
 
     def render(self):
 
@@ -118,6 +124,3 @@ if __name__ == "__main__":
     game = Game()
     game.run()
     game.quit()
- 
-
-
