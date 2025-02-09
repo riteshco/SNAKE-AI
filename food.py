@@ -16,5 +16,7 @@ class Food:
     def spawn(self , snake_arr):
         self.pos[0] = random.randrange(0 , WINDOW_SIZE[0]//CELL_SIZE)
         self.pos[1] = random.randrange(0 , WINDOW_SIZE[1]//CELL_SIZE)
+        if len(snake_arr) > WINDOW_SIZE[0]*WINDOW_SIZE[1]:
+            self.game_over = True
         if self.pos in snake_arr:
             self.spawn(snake_arr)

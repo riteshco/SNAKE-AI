@@ -34,6 +34,7 @@ class Game:
         self.score = 0
         self.game_over = False
         self.init_time = time.time()
+        self.time_seconds = 0
 
     def check_food_collision(self):
         if self.snake.arr[0][0] == self.food.pos[0] and self.snake.arr[0][1] == self.food.pos[1]:
@@ -43,11 +44,8 @@ class Game:
             self.snake.length +=1
 
     def snake_collision(self):
-        present = [self.snake.arr[0][0] , self.snake.arr[0][1]]
-        for i in range(self.snake.length):
-            if i!=0:
-                if present == self.snake.arr[i]:
-                    self.game_over = True
+        if self.snake.arr[0] in self.snake.arr[1:]:
+            self.game_over = True
             
 
     def run(self):
@@ -82,10 +80,11 @@ class Game:
             
 
     def update(self):
-        self.check_food_collision()
-        self.snake.Hamil_move()
-        self.snake.move()
-        self.snake_collision()
+        if not self.game_over:
+            self.check_food_collision()
+            self.snake.Hamil_move()
+            self.snake.move()
+            self.snake_collision()
 
     def render(self):
 
@@ -97,7 +96,7 @@ class Game:
             self.food.render(self.screen)
 
 
-
+            self.time_seconds = elapsed_seconds
 
             text_surface = self.font.render(f"Score: {self.score}", True, (255, 255, 255))
             self.screen.blit(text_surface, (20, 20))
@@ -106,12 +105,13 @@ class Game:
             self.screen.blit(atime, (WINDOW_SIZE[0]-atime.get_width()-20, 20))
         
         else:
+            formatted_final_time = time.strftime("%H:%M:%S", time.gmtime(self.time_seconds))
             self.screen.fill((12,12,12))
             final_score = pygame.transform.scale2x(self.font.render(f'The final Score: {self.score}' , True , (255 , 0 , 0)))
             self.screen.blit(final_score, (400 - final_score.get_width()//2, 300 - final_score.get_height()//2))
             retry_text = self.font.render("Press R to Restart", True, (200, 200, 200))
             self.screen.blit(retry_text, (400 - retry_text.get_width()//2, 400))
-            time_text = self.font.render(f"Your time being here: {formatted_time}", True, (200, 200, 200))
+            time_text = self.font.render(f"Your time being here: {formatted_final_time}", True, (200, 200, 200))
             self.screen.blit(time_text , (400 - final_score.get_width()//2, 100 - final_score.get_height()//2))
 
 
